@@ -25,10 +25,18 @@ namespace Grievence_Management.Controllers
             var checkEmail = await _context.StaffData.FirstOrDefaultAsync(x => x.Email == staffdata.Email);
             if (checkEmail == null)
             {
-                staffdata.Password = bcrypt.HashPassword(staffdata.Password, 12);
-                _context.StaffData.Add(staffdata);
-                await _context.SaveChangesAsync();
-                return Ok("User Created Successfully");
+                if(staffdata.Email.Contains("@gmail.com") && staffdata.Password.Length > 8)
+                {
+                    staffdata.Password = bcrypt.HashPassword(staffdata.Password, 12);
+                    _context.StaffData.Add(staffdata);
+                    await _context.SaveChangesAsync();
+                    return Ok("User Created Successfully");
+                }
+                else
+                {
+                    return BadRequest("Inputs does not meet requirements !");
+                }
+                
             }
             else
             {

@@ -31,7 +31,7 @@ namespace Grievence_Management.Controllers
             var checkEmail = await _context.StaffData.FirstOrDefaultAsync(x => x.Email == login.Email);
             if (checkEmail != null)
             {
-                if(!(bcrypt.Verify(login.Password, checkEmail.Password)))
+                if(bcrypt.Verify(login.Password, checkEmail.Password))
                 {
                     var token = CreateToken(checkEmail);
                     return Ok(token);
