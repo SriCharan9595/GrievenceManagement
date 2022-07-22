@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GrievenceManagement.Migrations
 {
     [DbContext(typeof(GrievenceManagementDbContext))]
-    [Migration("20220722113036_Second Commit")]
-    partial class SecondCommit
+    [Migration("20220722180326_Initial Commit")]
+    partial class InitialCommit
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -22,6 +22,32 @@ namespace GrievenceManagement.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             MySqlModelBuilderExtensions.HasCharSet(modelBuilder, "utf8mb4");
+
+            modelBuilder.Entity("GrievenceManagement.Models.IssueData", b =>
+                {
+                    b.Property<int>("TicketNo")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("EmpId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Subject")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.HasKey("TicketNo");
+
+                    b.ToTable("IssueData");
+                });
 
             modelBuilder.Entity("GrievenceManagement.Models.StaffData", b =>
                 {

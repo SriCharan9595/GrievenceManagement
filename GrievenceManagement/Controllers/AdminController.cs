@@ -1,6 +1,7 @@
 ﻿using GrievenceManagement.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Grievence_Management.Controllers
 {
@@ -19,9 +20,14 @@ namespace Grievence_Management.Controllers
 
         [HttpGet]
         [Route("getusers"), Authorize(Roles = "Admin")]
-        public async Task<IActionResult> GetUsers()
+        public IEnumerable<StaffData> GetUsers()
         {
-            return Ok("Hi");
+            
+            //var staffs = new List<StaffData>();
+
+            var staffs =  _context.StaffData.Where(x => x.Role == "User");
+
+            return (staffs);
         }
     }
 }

@@ -9,6 +9,7 @@ namespace GrievenceManagement.Models
 
         }
         public DbSet<StaffData> StaffData { get; set; }
+        public DbSet<IssueData> IssueData { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
