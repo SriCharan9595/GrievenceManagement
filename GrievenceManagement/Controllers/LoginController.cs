@@ -11,7 +11,7 @@ using bcrypt = BCrypt.Net.BCrypt;
 namespace Grievence_Management.Controllers
 {
 
-    [Route("[controller]")]
+    //[Route("[controller]")]
     [ApiController]
     public class LoginController : ControllerBase
     {
@@ -51,6 +51,7 @@ namespace Grievence_Management.Controllers
         {
             List<Claim> claims = new List<Claim>
             {
+                new Claim("ID",staffdata.Id.ToString()),
                 new Claim(ClaimTypes.Email, staffdata.Email),
                 new Claim(ClaimTypes.Role, staffdata.Role)
             };

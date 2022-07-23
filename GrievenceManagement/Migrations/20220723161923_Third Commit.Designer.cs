@@ -2,6 +2,7 @@
 using GrievenceManagement.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -9,9 +10,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GrievenceManagement.Migrations
 {
     [DbContext(typeof(GrievenceManagementDbContext))]
-    partial class GrievenceManagementDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220723161923_Third Commit")]
+    partial class ThirdCommit
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -27,19 +29,11 @@ namespace GrievenceManagement.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<string>("DefDesignation")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
                     b.Property<string>("Defendent")
                         .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("EmpDesignation")
                         .IsRequired()
                         .HasColumnType("longtext");
 

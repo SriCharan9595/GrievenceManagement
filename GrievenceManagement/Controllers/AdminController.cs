@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Grievence_Management.Controllers
 {
-    [Route("[controller]")]
+    //[Route("[controller]")]
     [ApiController]
     public class AdminController : Controller
     {
@@ -20,10 +20,25 @@ namespace Grievence_Management.Controllers
 
         [HttpGet]
         [Route("getUsers"), Authorize(Roles = "Admin")]
-        public IEnumerable<StaffData> GetUsers()
-        { 
-            var staffs =  _context.StaffData.Where(x => x.Role == "User");
-            return (staffs);
+        public ActionResult GetUsers()
+        {
+            var staffs = _context.StaffData.Where(x => x.Role == "User");
+
+            if (staffs != null)
+            {
+                var users = staffs.Select(u => new
+                {
+                    Id = u.Id,
+                    UserName = u.Username,
+                    Email = u.Email,
+                    Designation = u.Designation
+                });
+                return Ok(users);
+            }
+            else
+            {
+                return BadRequest("No Users Are There...");
+            }
         }
 
         [HttpGet]
@@ -37,16 +52,12 @@ namespace Grievence_Management.Controllers
         }
 
         [HttpPut]
-        [Route("updateIssueStatus"), Authorize(Roles = "Admin")]
-        public string updateIssueStatus([FromBody] IssueData issue)
+        [Route("updateStatus/{TicketNo}"), Authorize(Roles = "Admin")]
+        public string updateIssueStatus([FromBody] IssueData issue, int? TicketNo)
         {
             try
             {
-                var newChanges = _context.IssueData.Where(e => e.EmpId == issue.EmpId).SingleOrDefault();
-                newChanges.EmpId = issue.EmpId;
-                newChanges.TicketNo = issue.TicketNo;
-                newChanges.Subject = issue.Subject;
-                newChanges.Description = issue.Description;
+                var newChanges = _context.IssueData.Where(e => e.TicketNo == TicketNo).SingleOrDefault();
                 newChanges.Status = issue.Status;
                 _context.SaveChanges();
                 return "Issue Ticket " + issue.TicketNo + " Is Being Updated";
