@@ -16,12 +16,20 @@ namespace GrievenceManagement.Controllers
         }
 
         [HttpPost]
-        [Route("createissue"), Authorize(Roles = "User")]
+        [Route("createTicket"), Authorize(Roles = "User")]
         public async Task<IActionResult> Issue(IssueData issue)
         {
             _context.IssueData.Add(issue);
             await _context.SaveChangesAsync();
             return Ok("Successfully Raised Your Issue !");
         }
+
+        [Route("viewTickets/{id}"), Authorize(Roles = "Admin")]
+        public IEnumerable<IssueData> viewTickets(int? id)
+        {
+            var ticket = _context.IssueData.Where(e => e.EmpId == id);
+            return (ticket);
+        }
     }
 }
+

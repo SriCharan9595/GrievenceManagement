@@ -19,22 +19,18 @@ namespace Grievence_Management.Controllers
         }
 
         [HttpGet]
-        [Route("getusers"), Authorize(Roles = "Admin")]
+        [Route("getUsers"), Authorize(Roles = "Admin")]
         public IEnumerable<StaffData> GetUsers()
         { 
-
             var staffs =  _context.StaffData.Where(x => x.Role == "User");
-
             return (staffs);
         }
 
         [HttpGet]
         [Route("getIssues"), Authorize(Roles = "Admin")]
         public IEnumerable<IssueData> GetIssues()
-        {
-
+        { 
             var issues = new List<IssueData>();
-
             issues = _context.IssueData.ToList();
 
             return (issues);
@@ -53,7 +49,7 @@ namespace Grievence_Management.Controllers
                 newChanges.Description = issue.Description;
                 newChanges.Status = issue.Status;
                 _context.SaveChanges();
-                return "ssue ticket " + issue.TicketNo + " is being Updated";
+                return "Issue Ticket " + issue.TicketNo + " Is Being Updated";
             }
             catch (Exception ex)
             {
