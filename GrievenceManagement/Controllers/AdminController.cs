@@ -59,23 +59,24 @@ namespace Grievence_Management.Controllers
 
         [HttpPut]
         [Route("updateStatus/{TicketNo}"), Authorize(Roles = "Admin")]
-        public string updateStatus([FromBody] IssueData issue, int? TicketNo)
+        public string updateStatus([FromBody] StatusDTO status, int? TicketNo)
         {
             try
             {
                 var updateStatus = _context.IssueData.Where(e => e.TicketNo == TicketNo).SingleOrDefault();
 
-                var changes = new IssueData
-                {
-                    Defendent = updateStatus.Defendent,
-                    DefDesignation = updateStatus.DefDesignation,
-                    Subject = updateStatus.Subject,
-                    Description = updateStatus.Description,
-                    Status = issue.Status
-                };
+                //var changes = new IssueData
+                //{
+                //    Defendent = updateStatus.Defendent,
+                //    DefDesignation = updateStatus.DefDesignation,
+                //    Subject = updateStatus.Subject,
+                //    Description = updateStatus.Description,
+                //    Status = issue.Status
+                //};
+                updateStatus.Status = status.Status;
                 _context.SaveChanges();
-                Send.Producer(issue.Status);
-                return "Issue Ticket " + issue.TicketNo + " Is Being Updated";            
+                Send.Producer(status.Status);
+                return "Issue Ticket " + updateStatus.TicketNo + " Is Being Updated";            
             }
 
             catch (Exception ex)
