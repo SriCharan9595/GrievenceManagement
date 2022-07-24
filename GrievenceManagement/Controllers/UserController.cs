@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace GrievenceManagement.Controllers
 {
     //[Route("[controller]")]
-    [ApiController]
+    //[ApiController]
     public class UserController : Controller
     {
         private readonly IConfiguration _configuration;
@@ -17,13 +17,8 @@ namespace GrievenceManagement.Controllers
             _configuration = configuration;
         }
 
-
-
-        [HttpPost]
-        [Route("createTicket/{id}"), Authorize(Roles = "User")]
-        public async Task<IActionResult> createTicket(IssueData issue, int? id)
+        public string payloadData()
         {
-
             var payloadData = HttpContext.User;
             var ID = "";
             if (payloadData?.Claims != null)
@@ -34,10 +29,17 @@ namespace GrievenceManagement.Controllers
                     break;
                 }
             }
-            
-            if (id == Convert.ToInt32(ID))
+            return ID;
+        }
+
+        [HttpPost]
+        [Route("createTicket/{id}"), Authorize(Roles = "User")]
+        public async Task<IActionResult> createTicket(IssueData issue, int? id)
+        { 
+            var payloadId = Convert.ToInt32(payloadData());
+
+            if (id == payloadId)
             {
-                var payloadId = Convert.ToInt32(ID);
                 var staff = _context.StaffData.Where(x => x.Id == payloadId).SingleOrDefault();
                 
                 var complaint = new IssueData
@@ -66,10 +68,20 @@ namespace GrievenceManagement.Controllers
 
         [HttpGet]
         [Route("viewTicket/{id}"), Authorize(Roles = "User")]
-        public IEnumerable<IssueData> getTicket(int? id)
+        public async Task<IActionResult> getTicket(int? id)
         {
-            var ticket = _context.IssueData.Where(e => e.EmpId == id);
-            return (ticket);
+            var payloadId = Convert.ToInt32(payloadData());
+
+            if (id == payloadId)
+            {
+                var ticket = _context.IssueData.Where(e => e.EmpId == id);
+                return Ok(ticket);
+            }
+
+            else
+            {
+                return BadRequest("Incorrect EmpID !");
+            }
         }
 
 
@@ -78,10 +90,12 @@ namespace GrievenceManagement.Controllers
         [Route("updateTicket/{TicketNo}"), Authorize(Roles = "User")]
         public string updateTicket([FromBody] IssueData issue, int? TicketNo)
         {
-            try
-            {
-                var updateTicket = _context.IssueData.Where(e => e.TicketNo == TicketNo).SingleOrDefault();
+            var payloadId = Convert.ToInt32(payloadData());
+            
+            var updateTicket = _context.IssueData.Where(e => e.TicketNo == TicketNo).SingleOrDefault();
 
+            if (updateTicket.EmpId == payloadId)
+            {
                 updateTicket.Defendent = issue.Defendent;
                 updateTicket.DefDesignation = issue.DefDesignation;
                 updateTicket.Subject = issue.Subject;
@@ -90,9 +104,9 @@ namespace GrievenceManagement.Controllers
                 return "Issue Ticket " + updateTicket.TicketNo + " Is Being Updated";
             }
 
-            catch (Exception ex)
+            else
             {
-                return "Error Occured " + ex;
+                return "Error Occured " ;
             }
         }
 
@@ -102,17 +116,21 @@ namespace GrievenceManagement.Controllers
         [Route("deleteTicket/{TicketNo}"), Authorize(Roles = "User")]
         public string deleteTicket(int? TicketNo)
         {
-            try
+            var payloadId = Convert.ToInt32(payloadData());
+
+            var ticket = _context.IssueData.Where(e => e.TicketNo == TicketNo).SingleOrDefault();
+
+            if (ticket.EmpId == payloadId)
             {
-                var ticket = _context.IssueData.Where(e => e.TicketNo == TicketNo).SingleOrDefault();
                 _context.IssueData.Remove(ticket);
                 _context.SaveChanges();
 
                 return "Your Ticket "+ TicketNo +" is Deleted Successfully";
             }
-            catch (Exception ex)
+
+            else
             {
-                return "Exception occurred: " + ex;
+                return "Error Occured ";
             }
         }
     }

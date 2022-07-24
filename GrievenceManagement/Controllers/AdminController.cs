@@ -65,14 +65,6 @@ namespace Grievence_Management.Controllers
             {
                 var updateStatus = _context.IssueData.Where(e => e.TicketNo == TicketNo).SingleOrDefault();
 
-                //var changes = new IssueData
-                //{
-                //    Defendent = updateStatus.Defendent,
-                //    DefDesignation = updateStatus.DefDesignation,
-                //    Subject = updateStatus.Subject,
-                //    Description = updateStatus.Description,
-                //    Status = issue.Status
-                //};
                 updateStatus.Status = status.Status;
                 _context.SaveChanges();
                 Send.Producer(status.Status);
