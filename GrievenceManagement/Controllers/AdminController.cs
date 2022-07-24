@@ -18,20 +18,22 @@ namespace Grievence_Management.Controllers
             _configuration = configuration;
         }
 
+
+
         [HttpGet]
         [Route("getUsers"), Authorize(Roles = "Admin")]
         public ActionResult GetUsers()
         {
-            var staffs = _context.StaffData.Where(x => x.Role == "User");
+            var staff = _context.StaffData.Where(x => x.Role == "User");
 
-            if (staffs != null)
+            if (staff != null)
             {
-                var users = staffs.Select(u => new
+                var users = staff.Select(x => new
                 {
-                    Id = u.Id,
-                    UserName = u.Username,
-                    Email = u.Email,
-                    Designation = u.Designation
+                    Id = x.Id,
+                    UserName = x.Username,
+                    Email = x.Email,
+                    Designation = x.Designation
                 });
                 return Ok(users);
             }
@@ -40,6 +42,8 @@ namespace Grievence_Management.Controllers
                 return BadRequest("No Users Are There...");
             }
         }
+
+
 
         [HttpGet]
         [Route("getIssues"), Authorize(Roles = "Admin")]
@@ -51,14 +55,16 @@ namespace Grievence_Management.Controllers
             return (issues);
         }
 
+
+
         [HttpPut]
         [Route("updateStatus/{TicketNo}"), Authorize(Roles = "Admin")]
-        public string updateIssueStatus([FromBody] IssueData issue, int? TicketNo)
+        public string updateStatus([FromBody] IssueData issue, int? TicketNo)
         {
             try
             {
-                var newChanges = _context.IssueData.Where(e => e.TicketNo == TicketNo).SingleOrDefault();
-                newChanges.Status = issue.Status;
+                var updateData = _context.IssueData.Where(e => e.TicketNo == TicketNo).SingleOrDefault();
+                updateData.Status = issue.Status;
                 _context.SaveChanges();
                 return "Issue Ticket " + issue.TicketNo + " Is Being Updated";
             }

@@ -24,6 +24,8 @@ namespace Grievence_Management.Controllers
             _configuration = configuration;
         }
 
+
+
         [HttpPost]
         [Route("login")]
         public async Task<ActionResult<StaffData>> Login([FromBody] Login login)
@@ -46,6 +48,8 @@ namespace Grievence_Management.Controllers
                 return BadRequest("Invalid User");
             } 
         }
+
+
 
         private string CreateToken(StaffData staffdata)
         {

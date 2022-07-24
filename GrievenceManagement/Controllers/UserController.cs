@@ -17,16 +17,18 @@ namespace GrievenceManagement.Controllers
             _configuration = configuration;
         }
 
+
+
         [HttpPost]
         [Route("createTicket/{id}"), Authorize(Roles = "User")]
-        public async Task<IActionResult> Issue(IssueData issue, int? id)
+        public async Task<IActionResult> createTicket(IssueData issue, int? id)
         {
 
-            var principal = HttpContext.User;
+            var payloadData = HttpContext.User;
             var ID = "";
-            if (principal?.Claims != null)
+            if (payloadData?.Claims != null)
             {
-                foreach (var claim in principal.Claims)
+                foreach (var claim in payloadData.Claims)
                 {
                     ID = claim.Value;
                     break;
@@ -35,27 +37,56 @@ namespace GrievenceManagement.Controllers
             
             if (id == Convert.ToInt32(ID))
             {
-                issue.EmpId = Convert.ToInt32(ID);
-                _context.IssueData.Add(issue);
+                var payloadId = Convert.ToInt32(ID);
+                var staff = _context.StaffData.Where(x => x.Id == payloadId).SingleOrDefault();
+                
+                var complaint = new IssueData
+                {
+                    EmpId = staff.Id,
+                    EmpName = staff.Username,
+                    EmpDesignation = staff.Designation,
+                    Defendent = issue.Defendent,
+                    DefDesignation = issue.DefDesignation,
+                    Subject = issue.Subject,
+                    Description = issue.Description
+                };
+
+                _context.IssueData.Add(complaint);
                 await _context.SaveChangesAsync();
-                return Ok("Successfully Raised Your Issue !");
+                return Ok("Hey "+ complaint.EmpName +", Your Issue Is Raised Successfully");
             }
             else
             {
-                return BadRequest("Incorrect EmpID");
+                return BadRequest("Incorrect EmpID !");
             }            
         }
 
+
+
+        [HttpGet]
+        [Route("viewTicket/{id}"), Authorize(Roles = "User")]
+        public IEnumerable<IssueData> getTicket(int? id)
+        {
+            var ticket = _context.IssueData.Where(e => e.EmpId == id);
+            return (ticket);
+        }
+
+
+
         [HttpPut]
         [Route("updateTicket/{TicketNo}"), Authorize(Roles = "User")]
-        public string updateIssueStatus([FromBody] IssueData issue, int? TicketNo)
+        public string updateTicket([FromBody] IssueData issue, int? TicketNo)
         {
             try
             {
-                var newChanges = _context.IssueData.Where(e => e.TicketNo == TicketNo).SingleOrDefault();
-                newChanges.Status = issue.Status;
+                var updateData = _context.IssueData.Where(e => e.TicketNo == TicketNo).SingleOrDefault();
+
+                updateData.Defendent = issue.Defendent;
+                updateData.DefDesignation = issue.DefDesignation;
+                updateData.Subject = issue.Subject;
+                updateData.Description = issue.Description;
                 _context.SaveChanges();
-                return "Issue Ticket " + issue.TicketNo + " Is Being Updated";
+                return "Issue Ticket " + updateData.TicketNo + " Is Being Updated";
             }
             catch (Exception ex)
             {
@@ -63,13 +94,25 @@ namespace GrievenceManagement.Controllers
             }
         }
 
-        [HttpGet] 
-        [Route("viewTicket/{id}"), Authorize(Roles = "User")]
-        public IEnumerable<IssueData> viewTickets(int? id)
+
+
+        [HttpDelete]
+        [Route("deleteTicket/{TicketNo}"), Authorize(Roles = "User")]
+        public string deleteTicket(int? TicketNo)
         {
-            var ticket = _context.IssueData.Where(e => e.EmpId == id);
-            return (ticket);
+            try
+            {
+                var ticket = _context.IssueData.Where(e => e.TicketNo == TicketNo).SingleOrDefault();
+                _context.IssueData.Remove(ticket);
+                _context.SaveChanges();
+
+                return "Your Ticket "+ TicketNo +" is Deleted Successfully";
+            }
+            catch (Exception ex)
+            {
+                return "Exception occurred: " + ex;
+            }
         }
-}
+    }
 }
 

@@ -6,8 +6,9 @@ namespace GrievenceManagement.Models
     {
         [Key]
         public int TicketNo { get; set; }
-        public int EmpId { get; set; }    
-        public string EmpDesignation { get; set; }
+        public int EmpId { get; set; }   
+        public string? EmpName { get; set; }
+        public string? EmpDesignation { get; set; }
         public string Defendent { get; set; }
         public string DefDesignation { get; set; }
         public string Subject { get; set; }
