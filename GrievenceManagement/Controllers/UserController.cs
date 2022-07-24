@@ -55,6 +55,7 @@ namespace GrievenceManagement.Controllers
                 await _context.SaveChangesAsync();
                 return Ok("Hey "+ complaint.EmpName +", Your Issue Is Raised Successfully");
             }
+
             else
             {
                 return BadRequest("Incorrect EmpID !");
@@ -79,15 +80,16 @@ namespace GrievenceManagement.Controllers
         {
             try
             {
-                var updateData = _context.IssueData.Where(e => e.TicketNo == TicketNo).SingleOrDefault();
+                var updateTicket = _context.IssueData.Where(e => e.TicketNo == TicketNo).SingleOrDefault();
 
-                updateData.Defendent = issue.Defendent;
-                updateData.DefDesignation = issue.DefDesignation;
-                updateData.Subject = issue.Subject;
-                updateData.Description = issue.Description;
+                updateTicket.Defendent = issue.Defendent;
+                updateTicket.DefDesignation = issue.DefDesignation;
+                updateTicket.Subject = issue.Subject;
+                updateTicket.Description = issue.Description;
                 _context.SaveChanges();
-                return "Issue Ticket " + updateData.TicketNo + " Is Being Updated";
+                return "Issue Ticket " + updateTicket.TicketNo + " Is Being Updated";
             }
+
             catch (Exception ex)
             {
                 return "Error Occured " + ex;

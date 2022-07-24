@@ -63,11 +63,21 @@ namespace Grievence_Management.Controllers
         {
             try
             {
-                var updateData = _context.IssueData.Where(e => e.TicketNo == TicketNo).SingleOrDefault();
-                updateData.Status = issue.Status;
+                var updateStatus = _context.IssueData.Where(e => e.TicketNo == TicketNo).SingleOrDefault();
+
+                var changes = new IssueData
+                {
+                    Defendent = updateStatus.Defendent,
+                    DefDesignation = updateStatus.DefDesignation,
+                    Subject = updateStatus.Subject,
+                    Description = updateStatus.Description,
+                    Status = issue.Status
+                };
                 _context.SaveChanges();
-                return "Issue Ticket " + issue.TicketNo + " Is Being Updated";
+                Send.Producer(issue.Status);
+                return "Issue Ticket " + issue.TicketNo + " Is Being Updated";            
             }
+
             catch (Exception ex)
             {
                 return "Error Occured " + ex;
