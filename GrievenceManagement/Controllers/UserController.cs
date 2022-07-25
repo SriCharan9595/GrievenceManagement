@@ -17,6 +17,7 @@ namespace GrievenceManagement.Controllers
             _configuration = configuration;
         }
 
+
         public string payloadData()
         {
             var payloadData = HttpContext.User;
@@ -31,6 +32,8 @@ namespace GrievenceManagement.Controllers
             }
             return ID;
         }
+
+
 
         [HttpPost]
         [Route("createTicket/{id}"), Authorize(Roles = "User")]

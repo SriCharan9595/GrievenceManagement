@@ -18,6 +18,8 @@ namespace Grievence_Management.Controllers
             _configuration = configuration;
         }
 
+
+
         [HttpPost]
         [Route("register")]
         public async Task<ActionResult<StaffData>> Register([FromBody] StaffData staffdata)

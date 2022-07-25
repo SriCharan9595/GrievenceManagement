@@ -50,7 +50,6 @@ namespace Grievence_Management.Controllers
         }
 
 
-
         private string CreateToken(StaffData staffdata)
         {
             List<Claim> claims = new List<Claim>
