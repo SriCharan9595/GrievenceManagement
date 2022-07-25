@@ -11,7 +11,6 @@ using bcrypt = BCrypt.Net.BCrypt;
 namespace Grievence_Management.Controllers
 {
 
-    //[Route("[controller]")]
     [ApiController]
     public class LoginController : ControllerBase
     {
@@ -28,7 +27,7 @@ namespace Grievence_Management.Controllers
 
         [HttpPost]
         [Route("login")]
-        public async Task<ActionResult<StaffData>> Login([FromBody] Login login)
+        public async Task<ActionResult<StaffData>> Login([FromBody] LoginDTO login)
         {
             var checkEmail = await _context.StaffData.FirstOrDefaultAsync(x => x.Email == login.Email);
             if (checkEmail != null)

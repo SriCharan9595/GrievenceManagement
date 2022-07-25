@@ -4,8 +4,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace GrievenceManagement.Controllers
 {
-    //[Route("[controller]")]
-    //[ApiController]
     public class UserController : Controller
     {
         private readonly IConfiguration _configuration;

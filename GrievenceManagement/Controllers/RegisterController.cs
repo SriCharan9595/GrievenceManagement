@@ -5,7 +5,6 @@ using bcrypt = BCrypt.Net.BCrypt;
 
 namespace Grievence_Management.Controllers
 {
-    //[Route("[controller]")]
     [ApiController]
     public class RegisterController : Controller
     {
