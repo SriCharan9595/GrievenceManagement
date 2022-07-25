@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GrievenceManagement.Migrations
 {
     [DbContext(typeof(GrievenceManagementDbContext))]
-    [Migration("20220723200049_Fourth Commit")]
-    partial class FourthCommit
+    [Migration("20220725061816_Initial Commit")]
+    partial class InitialCommit
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -29,6 +29,10 @@ namespace GrievenceManagement.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    b.Property<string>("DefDesignation")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
                     b.Property<string>("Defendent")
                         .IsRequired()
                         .HasColumnType("longtext");
@@ -37,12 +41,14 @@ namespace GrievenceManagement.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<string>("Designation")
-                        .IsRequired()
+                    b.Property<string>("EmpDesignation")
                         .HasColumnType("longtext");
 
                     b.Property<int>("EmpId")
                         .HasColumnType("int");
+
+                    b.Property<string>("EmpName")
+                        .HasColumnType("longtext");
 
                     b.Property<string>("Status")
                         .HasColumnType("longtext");

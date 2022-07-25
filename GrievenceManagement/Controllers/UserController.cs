@@ -35,7 +35,7 @@ namespace GrievenceManagement.Controllers
 
         [HttpPost]
         [Route("createTicket/{id}"), Authorize(Roles = "User")]
-        public async Task<IActionResult> createTicket(IssueData issue, int? id)
+        public async Task<IActionResult> createTicket([FromBody]IssueData issue, int? id)
         { 
             var payloadId = Convert.ToInt32(payloadData());
 
@@ -68,7 +68,7 @@ namespace GrievenceManagement.Controllers
 
 
         [HttpGet]
-        [Route("viewTicket/{id}"), Authorize(Roles = "User")]
+        [Route("getTicket/{id}"), Authorize(Roles = "User")]
         public async Task<IActionResult> getTicket(int? id)
         {
             var payloadId = Convert.ToInt32(payloadData());
