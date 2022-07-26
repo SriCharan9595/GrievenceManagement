@@ -6,13 +6,11 @@ namespace GrievenceManagement.Controllers
 {
     public class UserController : Controller
     {
-        private readonly IConfiguration _configuration;
         private readonly GrievenceManagementDbContext _context;
 
-        public UserController(IConfiguration configuration, GrievenceManagementDbContext context)
+        public UserController(GrievenceManagementDbContext context)
         {
             _context = context;
-            _configuration = configuration;
         }
 
 
@@ -35,14 +33,14 @@ namespace GrievenceManagement.Controllers
 
         [HttpPost]
         [Route("createTicket/{id}"), Authorize(Roles = "User")]
-        public async Task<IActionResult> createTicket([FromBody]IssueData issue, int? id)
-        { 
+        public async Task<IActionResult> createTicket([FromBody] IssueData issue, int? id)
+        {
             var payloadId = Convert.ToInt32(payloadData());
 
             if (id == payloadId)
             {
                 var staff = _context.StaffData.Where(x => x.Id == payloadId).SingleOrDefault();
-                
+
                 var complaint = new IssueData
                 {
                     EmpId = staff.Id,
@@ -56,13 +54,13 @@ namespace GrievenceManagement.Controllers
 
                 _context.IssueData.Add(complaint);
                 await _context.SaveChangesAsync();
-                return Ok("Hey "+ complaint.EmpName +", Your Issue Is Raised Successfully");
+                return Ok("Hey " + complaint.EmpName + ", Your Issue Is Raised Successfully");
             }
 
             else
             {
                 return BadRequest("Incorrect EmpID !");
-            }            
+            }
         }
 
 
@@ -89,10 +87,10 @@ namespace GrievenceManagement.Controllers
 
         [HttpPut]
         [Route("updateTicket/{TicketNo}"), Authorize(Roles = "User")]
-        public string updateTicket([FromBody] IssueData issue, int? TicketNo)
+        public async Task<IActionResult> updateTicket([FromBody] IssueData issue, int? TicketNo)
         {
             var payloadId = Convert.ToInt32(payloadData());
-            
+
             var updateTicket = _context.IssueData.Where(e => e.TicketNo == TicketNo).SingleOrDefault();
 
             if (updateTicket.EmpId == payloadId)
@@ -102,12 +100,12 @@ namespace GrievenceManagement.Controllers
                 updateTicket.Subject = issue.Subject;
                 updateTicket.Description = issue.Description;
                 _context.SaveChanges();
-                return "Issue Ticket " + updateTicket.TicketNo + " Is Being Updated";
+                return Ok("Issue Ticket " + updateTicket.TicketNo + " Is Being Updated");
             }
 
             else
             {
-                return "Error Occured " ;
+                return BadRequest("Incorrect EmpID !");
             }
         }
 
@@ -115,7 +113,7 @@ namespace GrievenceManagement.Controllers
 
         [HttpDelete]
         [Route("deleteTicket/{TicketNo}"), Authorize(Roles = "User")]
-        public string deleteTicket(int? TicketNo)
+        public async Task<IActionResult> deleteTicket(int? TicketNo)
         {
             var payloadId = Convert.ToInt32(payloadData());
 
@@ -126,14 +124,13 @@ namespace GrievenceManagement.Controllers
                 _context.IssueData.Remove(ticket);
                 _context.SaveChanges();
 
-                return "Your Ticket "+ TicketNo +" is Deleted Successfully";
+                return Ok("Your Ticket " + TicketNo + " is Deleted Successfully");
             }
 
             else
             {
-                return "Error Occured ";
+                return BadRequest("");
             }
         }
     }
 }
-

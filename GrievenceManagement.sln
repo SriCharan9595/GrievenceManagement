@@ -5,7 +5,7 @@ VisualStudioVersion = 17.2.32616.157
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GrievenceManagement", "GrievenceManagement\GrievenceManagement.csproj", "{1D8ED875-4CB9-4397-98F2-E936726EF82B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StatusProject", "StatusProject\StatusProject.csproj", "{473B2DA2-3FF8-4315-8637-6718B942313D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StatusProject", "StatusProject\StatusProject.csproj", "{473B2DA2-3FF8-4315-8637-6718B942313D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
